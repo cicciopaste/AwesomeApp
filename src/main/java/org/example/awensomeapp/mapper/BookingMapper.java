@@ -12,7 +12,6 @@ public class BookingMapper {
 		booking.setNote(request.getNote());
 		booking.setSlot(request.getSlot());
 		booking.setRoomId(request.getRoomId());
-		booking.setStatus(BookingStatusEnum.CREATE);
 
 		return booking;
 	}

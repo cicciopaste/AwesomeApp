@@ -14,18 +14,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Data
-@EntityListeners(AuditingEntityListener.class)
 public class Booking {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Temporal(TemporalType.DATE)
 	private Date bookingDate;
+
 	private Long roomId;
 
 	@Enumerated(EnumType.STRING)
@@ -34,15 +39,24 @@ public class Booking {
 	@Enumerated(EnumType.STRING)
 	private BookingStatusEnum status;
 
-
-	@CreatedDate
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 
-	@LastModifiedDate
 	@Column(nullable = false)
 	private LocalDateTime updatedAt;
 
 	@Lob
 	private String note;
+
+	@PrePersist
+	public void prePersist() {
+		createdAt = LocalDateTime.now();
+		updatedAt = LocalDateTime.now();
+		status = BookingStatusEnum.CREATE;
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		updatedAt = LocalDateTime.now();
+	}
 }
