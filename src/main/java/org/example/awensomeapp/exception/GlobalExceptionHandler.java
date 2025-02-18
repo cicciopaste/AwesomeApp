@@ -13,9 +13,9 @@ public class GlobalExceptionHandler {
 	private static final String NOT_MODIFIABLE_MESSAGE = "booking request is approved or denie create new one";
 
 	@ExceptionHandler(BookingUnmodifiableExcpetion.class)
-	@ResponseStatus(HttpStatus.NOT_MODIFIED)
+	@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
 	public ResponseEntity<String> handleBookingUnmodifiableExcpetion() {
-		return new ResponseEntity<>(NOT_MODIFIABLE_MESSAGE,HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<>(NOT_MODIFIABLE_MESSAGE,HttpStatus.METHOD_NOT_ALLOWED);
 	}
 
 	@ExceptionHandler(ResourceNotFoundException.class)
