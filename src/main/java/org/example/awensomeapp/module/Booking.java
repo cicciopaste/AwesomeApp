@@ -18,6 +18,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -29,7 +30,7 @@ public class Booking {
 	private Long id;
 
 	@Temporal(TemporalType.DATE)
-	private Date bookingDate;
+	private LocalDate bookingDate;
 
 	private Long roomId;
 

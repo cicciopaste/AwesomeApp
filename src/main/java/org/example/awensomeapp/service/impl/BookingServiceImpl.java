@@ -10,10 +10,9 @@ import org.example.awensomeapp.module.BookingSlotEnum;
 import org.example.awensomeapp.module.BookingStatusEnum;
 import org.example.awensomeapp.repository.BookingRepo;
 import org.example.awensomeapp.service.BookingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.MethodNotAllowedException;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -95,7 +94,7 @@ public class BookingServiceImpl implements BookingService {
 
 		Long roomId = booking.getRoomId();
 		BookingSlotEnum slot = booking.getSlot();
-		Date bookingDate = booking.getBookingDate();
+		LocalDate bookingDate = booking.getBookingDate();
 
 		if (bookingRepo.existApprovedBooking(roomId, bookingDate, slot)) {
 			throw new NotApprovableException();
