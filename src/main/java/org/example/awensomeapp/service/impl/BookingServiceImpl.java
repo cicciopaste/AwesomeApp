@@ -47,9 +47,7 @@ public class BookingServiceImpl implements BookingService {
 	public Booking updateBooking(Long id, BookingRequestDTO request) {
 		Booking existBooking = getBookingById(id);
 
-		if (existBooking.getStatus() != BookingStatusEnum.CREATE) {
-			throw new BookingUnmodifiableExcpetion();
-		}
+		chkIsAlreadyApproveOrDenie(existBooking);
 
 		if(request.getBookingDate() != null) existBooking.setBookingDate(request.getBookingDate());
 		if(request.getSlot() != null) existBooking.setSlot(request.getSlot());
@@ -63,21 +61,10 @@ public class BookingServiceImpl implements BookingService {
 	public Booking approveBooking(Long id) {
 		Booking booking = getBookingById(id);
 
-		chkExistApprovedBooking(booking);
+		validateApproveBooking(booking);
 
 		booking.setStatus(BookingStatusEnum.APPROVE);
 		return bookingRepo.save(booking);
-	}
-
-	private void chkExistApprovedBooking(Booking booking) {
-
-		Long roomId = booking.getRoomId();
-		BookingSlotEnum slot = booking.getSlot();
-		Date bookingDate = booking.getBookingDate();
-
-		if (bookingRepo.existApprovedBooking(roomId, bookingDate, slot)) {
-			throw new NotApprovableException();
-		}
 	}
 
 	@Override
@@ -91,5 +78,27 @@ public class BookingServiceImpl implements BookingService {
 	public void deleteBooking(Long id) {
 		getBookingById(id);
 		bookingRepo.deleteById(id);
+	}
+
+	private void validateApproveBooking(Booking booking) {
+		chkIsAlreadyApproveOrDenie(booking);
+		chkExistApprovedBooking(booking);
+	}
+
+	private void chkIsAlreadyApproveOrDenie(Booking booking) {
+		if (booking.getStatus() != BookingStatusEnum.CREATE) {
+			throw new BookingUnmodifiableExcpetion();
+		}
+	}
+
+	private void chkExistApprovedBooking(Booking booking) {
+
+		Long roomId = booking.getRoomId();
+		BookingSlotEnum slot = booking.getSlot();
+		Date bookingDate = booking.getBookingDate();
+
+		if (bookingRepo.existApprovedBooking(roomId, bookingDate, slot)) {
+			throw new NotApprovableException();
+		}
 	}
 }
