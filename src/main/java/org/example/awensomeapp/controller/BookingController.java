@@ -3,6 +3,7 @@ package org.example.awensomeapp.controller;
 import org.example.awensomeapp.dto.BookingRequestDTO;
 import org.example.awensomeapp.module.Booking;
 import org.example.awensomeapp.module.BookingStatusEnum;
+import org.example.awensomeapp.repository.BookingRepo;
 import org.example.awensomeapp.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,11 @@ import java.util.List;
 @RequestMapping("/booking")
 public class BookingController {
 
-	@Autowired
-	BookingService bookingService;
+	private final BookingService bookingService;
+
+	public BookingController(BookingService bookingService) {
+		this.bookingService = bookingService;
+	}
 
 	@GetMapping("/{id}")
 	ResponseEntity<Booking> readBooking (@PathVariable("id") Long id){
@@ -40,9 +44,19 @@ public class BookingController {
 		return ResponseEntity.ok("Eliminazione Avvenuta con successo");
 	}
 
-	@PutMapping("/{id}/status/{status}")
-	ResponseEntity<Booking> updateBooking (@PathVariable("id") Long id, @PathVariable("status") String status){
-		return ResponseEntity.ok(bookingService.updateBooking(id, BookingStatusEnum.valueOf(status)));
+	@PutMapping("/{id}")
+	ResponseEntity<Booking> updateBooking (@PathVariable("id") Long id, @RequestBody BookingRequestDTO request){
+		return ResponseEntity.ok(bookingService.updateBooking(id, request));
+	}
+
+	@PutMapping("/{id}/approve")
+	ResponseEntity<Booking> approveBooking (@PathVariable("id") Long id){
+		return ResponseEntity.ok(bookingService.approveBooking(id));
+	}
+
+	@PutMapping("/{id}/denie")
+	ResponseEntity<Booking> denieBooking (@PathVariable("id") Long id){
+		return ResponseEntity.ok(bookingService.denieBooking(id));
 	}
 
 	@GetMapping("/queue")
