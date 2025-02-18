@@ -12,7 +12,7 @@ import java.util.Date;
 @Repository
 public interface BookingRepo extends JpaRepository<Booking, Long> {
 
-	@Query("SELECT COUNT(u) > 0 FROM Booking u WHERE u.roomId = :roomId and u.bookingDate = :date and u.slot = :slot and u.status = APPROVE")
-	boolean existApprovedBooking (@Param("room") Long roomId, @Param("date") Date bookingDate, @Param("slot") String slot);
+	@Query("SELECT COUNT(u) > 0 FROM Booking u WHERE u.roomId = :room and u.bookingDate = :date and u.slot = :slot and u.status = APPROVE")
+	boolean existApprovedBooking (@Param("room") Long roomId, @Param("date") Date bookingDate, @Param("slot") BookingSlotEnum slot);
 
 }

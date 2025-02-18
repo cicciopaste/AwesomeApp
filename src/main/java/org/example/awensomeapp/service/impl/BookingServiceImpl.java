@@ -75,7 +75,7 @@ public class BookingServiceImpl implements BookingService {
 		BookingSlotEnum slot = booking.getSlot();
 		Date bookingDate = booking.getBookingDate();
 
-		if (bookingRepo.existApprovedBooking(roomId, bookingDate, slot.name())) {
+		if (bookingRepo.existApprovedBooking(roomId, bookingDate, slot)) {
 			throw new NotApprovableException();
 		}
 	}
